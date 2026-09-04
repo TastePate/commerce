@@ -6,7 +6,7 @@
     <div class="listings-container">
 
     {% for listing in listings %}
-        <div class="listings-item">listing</div>
+        <div class="listings-item">{{ listing }}</div>
     {% empty %}
         <h3>There are no listings yet. Create your first one!</h3>
     {% endfor %}
