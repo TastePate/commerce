@@ -12,6 +12,10 @@
             <p>{{ listing.description }}</p>
             <img src="{ listing.image_src }" alt="Listing Image">
             <p>{{ listing.created_by.username }}</p>
+            <form action="{% url 'watchlist' listing.id %}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Add to Watchlist" name="auction_id">
+            </form>
         </div>
     {% empty %}
         <h3>There are no listings yet. Create your first one!</h3>

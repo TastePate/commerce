@@ -95,3 +95,13 @@ def create(request: HttpRequest):
     return render(request, "auctions/create.html", {
         "form": CreateListingForm(),
     })
+
+
+def watchlist(request: HttpRequest, id=None):
+    if request.method == "POST":
+        Listing.objects.filter(pk=id).first().wishlisted_by.add(request.user)
+        return redirect(reverse("index"))
+    else:
+        return render(request, "auctions/watchlist.html", {
+            "watchlist": Listing.objects.all()
+        })

@@ -5,14 +5,16 @@
 
     <div class="listings-container">
 
-    {% for listing in listings %}
-        <div class="listings-item">
-            <p>{{ listing.title }}</p>
-            <p>{{ listing.category }}</p>
-            <p>{{ listing.description }}</p>
-            <img src="{ listing.image_src }" alt="Listing Image">
-            <p>{{ listing.created_by.username }}</p>
-        </div>
+    {% for auction in watchlist %}
+        {% if request.user in auction.wishlisted_by.all %}
+            <div class="listings-item">
+                <p>{{ auction.title }}</p>
+                <p>{{ auction.category }}</p>
+                <p>{{ auction.description }}</p>
+                <img src="{ auction.image_src }" alt="Listing Image">
+                <p>{{ auction.created_by.username }}</p>
+            </div>
+        {% endif %}
     {% empty %}
         <h3>There are no listings yet. Create your first one!</h3>
     {% endfor %}
