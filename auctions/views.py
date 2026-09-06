@@ -99,7 +99,12 @@ def create(request: HttpRequest):
 
 def watchlist(request: HttpRequest, id=None):
     if request.method == "POST":
-        Listing.objects.filter(pk=id).first().wishlisted_by.add(request.user)
+        listing = Listing.objects.filter(pk=id).first()
+        user = request.user
+        if user not in listing.wishlisted_by.all():
+            listing.wishlisted_by.add(user)
+        else:
+            listing.wishlisted_by.remove(user)
         return redirect(reverse("index"))
     else:
         return render(request, "auctions/watchlist.html", {

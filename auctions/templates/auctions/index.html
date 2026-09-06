@@ -14,7 +14,11 @@
             <p>{{ listing.created_by.username }}</p>
             <form action="{% url 'watchlist' listing.id %}" method="post">
                 {% csrf_token %}
-                <input type="submit" value="Add to Watchlist" name="auction_id">
+                {% if request.user not in listing.wishlisted_by.all %}
+                    <input type="submit" value="Add to Watchlist" name="auction_id">
+                {% else %}
+                    <input type="submit" value="Remove from Watchlist" name="auction_id">
+                {% endif %}
             </form>
         </div>
     {% empty %}

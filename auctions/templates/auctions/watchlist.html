@@ -13,6 +13,10 @@
                 <p>{{ auction.description }}</p>
                 <img src="{ auction.image_src }" alt="Listing Image">
                 <p>{{ auction.created_by.username }}</p>
+                <form action="{% url 'watchlist' auction.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Remove from Watchlist" name="auction_id">
+                </form>
             </div>
         {% endif %}
     {% empty %}
