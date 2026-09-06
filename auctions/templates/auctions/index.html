@@ -10,7 +10,8 @@
             <p>{{ listing.title }}</p>
             <p>{{ listing.category }}</p>
             <p>{{ listing.description }}</p>
-            <img src="{ listing.image_src }" alt="Listing Image">
+            <img src="{{ listing.image_src }}" alt="Listing Image">
+            <p>{{ listing.start_amount}}</p>
             <p>{{ listing.created_by.username }}</p>
             <form action="{% url 'watchlist' listing.id %}" method="post">
                 {% csrf_token %}
