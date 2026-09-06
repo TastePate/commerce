@@ -1,11 +1,12 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
+from django.db.models import Model
 from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django import forms
 
-from .models import User, Listing
+from .models import User, Listing, Bid
 
 
 class CreateListingForm(forms.Form):
@@ -14,6 +15,9 @@ class CreateListingForm(forms.Form):
     image_src = forms.CharField()
     category = forms.CharField()
     start_amount = forms.DecimalField()
+
+class CreateBidForm(forms.Form):
+    amount = forms.DecimalField()
 
 
 def index(request):
@@ -114,5 +118,19 @@ def watchlist(request: HttpRequest, id=None):
 
 def listing(request, id):
     return render(request, "auctions/listing.html", {
-        "listing": Listing.objects.filter(pk=id).first()
+        "listing": Listing.objects.filter(pk=id).first(),
+        "bid_form": CreateBidForm(),
+        "bids": Bid.objects.filter(listing=id).all()
     })
+
+def bid(request, id):
+    if request.method == "POST":
+        form = CreateBidForm(request.POST)
+        if form.is_valid():
+            amount = form.cleaned_data["amount"]
+            Bid.objects.create(
+                amount=amount,
+                created_by=request.user,
+                listing=Listing.objects.filter(pk=id).first()
+            )
+    return redirect("listing", id=id)

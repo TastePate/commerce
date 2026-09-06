@@ -8,6 +8,16 @@
         <p>{{ listing.description }}</p>
         <img src="{{ listing.image_src }}">
         <p>Start amount: {{ listing.start_amount }}</p>
+        {% for bid in bids %}
+            <p>Amount: {{ bid.amount }}. Created by: {{ bid.created_by }} </p>
+        {% empty %}
+            <p>There're no bids for now. Be the first!</p>
+        {% endfor %}
+        <form action="{% url 'bid' listing.id %}" method="post">
+            {% csrf_token %}
+            {{ bid_form }}
+            <input type="submit">
+        </form>
         <p>Created by: {{ listing.created_by }}</p>
         <p>{{ listing.post_day }}</p>
     </div>
