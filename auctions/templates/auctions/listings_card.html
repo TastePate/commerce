@@ -1,0 +1,19 @@
+<div class="listings-item">
+    <h3>{{ listing.title }}</h3>
+    <p>{{ listing.category }}</p>
+    <p>{{ listing.description }}</p>
+    <img src="{{ listing.image_src }}" alt="Listing Image">
+    {% if listing.start_amount %}
+        <p>{{ listing.start_amount }}</p>
+    {% endif %}
+    <p>{{ listing.created_by.username }}</p>
+
+    <form action="{% url 'watchlist' listing.id %}" method="post">
+        {% csrf_token %}
+        {% if request.user not in listing.wishlisted_by.all %}
+            <input type="submit" value="Add to Watchlist" name="auction_id">
+        {% else %}
+            <input type="submit" value="Remove from Watchlist" name="auction_id">
+        {% endif %}
+    </form>
+</div>

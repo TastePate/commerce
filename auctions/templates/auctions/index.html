@@ -4,24 +4,8 @@
     <h2>Active Listings</h2>
 
     <div class="listings-container">
-
     {% for listing in listings %}
-        <div class="listings-item">
-            <p>{{ listing.title }}</p>
-            <p>{{ listing.category }}</p>
-            <p>{{ listing.description }}</p>
-            <img src="{{ listing.image_src }}" alt="Listing Image">
-            <p>{{ listing.start_amount}}</p>
-            <p>{{ listing.created_by.username }}</p>
-            <form action="{% url 'watchlist' listing.id %}" method="post">
-                {% csrf_token %}
-                {% if request.user not in listing.wishlisted_by.all %}
-                    <input type="submit" value="Add to Watchlist" name="auction_id">
-                {% else %}
-                    <input type="submit" value="Remove from Watchlist" name="auction_id">
-                {% endif %}
-            </form>
-        </div>
+        {% include "auctions/listings_card.html" %}
     {% empty %}
         <h3>There are no listings yet. Create your first one!</h3>
     {% endfor %}

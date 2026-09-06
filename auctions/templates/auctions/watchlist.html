@@ -5,19 +5,9 @@
 
     <div class="listings-container">
 
-    {% for auction in watchlist %}
-        {% if request.user in auction.wishlisted_by.all %}
-            <div class="listings-item">
-                <p>{{ auction.title }}</p>
-                <p>{{ auction.category }}</p>
-                <p>{{ auction.description }}</p>
-                <img src="{ auction.image_src }" alt="Listing Image">
-                <p>{{ auction.created_by.username }}</p>
-                <form action="{% url 'watchlist' auction.id %}" method="post">
-                    {% csrf_token %}
-                    <input type="submit" value="Remove from Watchlist" name="auction_id">
-                </form>
-            </div>
+    {% for listing in watchlist %}
+        {% if request.user in listing.wishlisted_by.all %}
+            {% include "auctions/listings_card.html" %}
         {% endif %}
     {% empty %}
         <h3>There are no listings yet. Create your first one!</h3>

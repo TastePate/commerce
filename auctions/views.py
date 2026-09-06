@@ -110,3 +110,8 @@ def watchlist(request: HttpRequest, id=None):
         return render(request, "auctions/watchlist.html", {
             "watchlist": Listing.objects.all()
         })
+
+def listing(request, id):
+    return render(request, "auctions/listing.html", {
+        "listing": Listing.objects.filter(pk=id).first()
+    })
