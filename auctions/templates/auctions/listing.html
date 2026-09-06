@@ -1,7 +1,15 @@
-{% extends "auctions/listing.html" %}
+{% extends "auctions/layout.html" %}
 
 
 {% block body %}
-    TODO
+    <div class="article-container">
+        <h1>{{ listing.title }}</h1>
+        <p>{{ listing.category }}</p>
+        <p>{{ listing.description }}</p>
+        <img src="{{ listing.image_src }}">
+        <p>Start amount: {{ listing.start_amount }}</p>
+        <p>Created by: {{ listing.created_by }}</p>
+        <p>{{ listing.post_day }}</p>
+    </div>
 {% endblock %}
 

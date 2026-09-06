@@ -83,6 +83,7 @@ def create(request: HttpRequest):
                 title=data["title"],
                 description=data["description"],
                 image_src=data["image_src"] if data["image_src"] else None,
+                start_amount=data["start_amount"],
                 category=data["category"] if data["category"] else None,
                 created_by=request.user,
             )

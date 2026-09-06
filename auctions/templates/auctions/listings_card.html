@@ -1,12 +1,11 @@
 <div class="listings-item">
-    <h3>{{ listing.title }}</h3>
-    <p>{{ listing.category }}</p>
-    <p>{{ listing.description }}</p>
+    <h3><a href="{% url 'listing' listing.id %}">{{ listing.title }}</a></h3>
+    <p>{{ listing.description|slice:":100" }}</p>
     <img src="{{ listing.image_src }}" alt="Listing Image">
     {% if listing.start_amount %}
         <p>{{ listing.start_amount }}</p>
     {% endif %}
-    <p>{{ listing.created_by.username }}</p>
+    <p>{{ listing.post_date }}</p>
 
     <form action="{% url 'watchlist' listing.id %}" method="post">
         {% csrf_token %}
