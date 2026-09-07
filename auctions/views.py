@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.db.models import Model, Max
 from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
@@ -79,6 +80,7 @@ def register(request):
         return render(request, "auctions/register.html")
 
 
+@login_required
 def create(request: HttpRequest):
     if request.method == "POST":
         form = CreateListingForm(request.POST)
@@ -89,7 +91,7 @@ def create(request: HttpRequest):
                 description=data["description"],
                 image_src=data["image_src"] if data["image_src"] else None,
                 start_amount=data["start_amount"],
-                category=data["category"] if data["category"] else None,
+                category=data["category"] if data["category"] else "Uncategorized",
                 created_by=request.user,
             )
             return redirect(reverse("index"))
@@ -103,6 +105,7 @@ def create(request: HttpRequest):
     })
 
 
+@login_required
 def watchlist(request: HttpRequest, id=None):
     if request.method == "POST":
         listing = Listing.objects.filter(pk=id).first()
@@ -124,6 +127,7 @@ def listing(request, id):
         "bids": Bid.objects.filter(listing=id).all()
     })
 
+@login_required
 def bid(request, id):
     if request.method == "POST":
         form = CreateBidForm(request.POST)

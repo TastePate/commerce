@@ -1,10 +1,10 @@
 <div class="listings-item">
     <h3><a href="{% url 'listing' listing.id %}">{{ listing.title }}</a></h3>
     <p>{{ listing.description|slice:":100" }}</p>
-    <img src="{{ listing.image_src }}" alt="Listing Image">
-    {% if listing.start_amount %}
-        <p>{{ listing.start_amount }}</p>
+    {% if listing.image_src %}
+        <img src="{{ listing.image_src }}" alt="Listing Image">
     {% endif %}
+    <p>{{ listing.start_amount }}</p>
     <p>{{ listing.post_date }}</p>
 
     <form action="{% url 'watchlist' listing.id %}" method="post">

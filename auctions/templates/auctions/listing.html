@@ -6,7 +6,10 @@
         <h1>{{ listing.title }}</h1>
         <p>{{ listing.category }}</p>
         <p>{{ listing.description }}</p>
-        <img src="{{ listing.image_src }}">
+        {% if listing.image_src %}
+            <img src="{{ listing.image_src }}">
+        {% endif %}
+
         <p>Start amount: {{ listing.start_amount }}</p>
         {% for bid in bids %}
             <p>Amount: {{ bid.amount }}. Created by: {{ bid.created_by }} </p>
