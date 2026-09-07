@@ -1,10 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.db.models import Model
+from django.db.models import Model, Max
 from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django import forms
+from django.contrib import messages
 
 from .models import User, Listing, Bid
 
@@ -12,12 +13,12 @@ from .models import User, Listing, Bid
 class CreateListingForm(forms.Form):
     title = forms.CharField()
     description = forms.CharField()
-    image_src = forms.CharField()
-    category = forms.CharField()
-    start_amount = forms.DecimalField()
+    image_src = forms.CharField(required=False)
+    category = forms.CharField(required=False)
+    start_amount = forms.DecimalField(min_value=0.1)
 
 class CreateBidForm(forms.Form):
-    amount = forms.DecimalField()
+    amount = forms.DecimalField(min_value=0.1)
 
 
 def index(request):
@@ -127,7 +128,15 @@ def bid(request, id):
     if request.method == "POST":
         form = CreateBidForm(request.POST)
         if form.is_valid():
+            listing = Listing.objects.filter(pk=id).first()
+            max_bid = Bid.objects.filter(listing=listing).aggregate(max_amount=Max("amount"))["max_amount"]
+            current_price = max_bid if max_bid else listing.start_amount
+
             amount = form.cleaned_data["amount"]
+            if current_price > amount:
+                messages.error(request, "Incorrect amount!")
+                return redirect("listing", id=id)
+
             Bid.objects.create(
                 amount=amount,
                 created_by=request.user,
