@@ -1,19 +1,25 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
+from django.db.models import Model, Max
 from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django import forms
+from django.contrib import messages
 
-from .models import User, Listing
+from .models import User, Listing, Bid
 
 
 class CreateListingForm(forms.Form):
     title = forms.CharField()
     description = forms.CharField()
-    image_src = forms.CharField()
-    category = forms.CharField()
-    start_amount = forms.DecimalField()
+    image_src = forms.CharField(required=False)
+    category = forms.CharField(required=False)
+    start_amount = forms.DecimalField(min_value=0.1)
+
+class CreateBidForm(forms.Form):
+    amount = forms.DecimalField(min_value=0.1)
 
 
 def index(request):
@@ -74,6 +80,7 @@ def register(request):
         return render(request, "auctions/register.html")
 
 
+@login_required
 def create(request: HttpRequest):
     if request.method == "POST":
         form = CreateListingForm(request.POST)
@@ -84,7 +91,7 @@ def create(request: HttpRequest):
                 description=data["description"],
                 image_src=data["image_src"] if data["image_src"] else None,
                 start_amount=data["start_amount"],
-                category=data["category"] if data["category"] else None,
+                category=data["category"] if data["category"] else "Uncategorized",
                 created_by=request.user,
             )
             return redirect(reverse("index"))
@@ -98,6 +105,7 @@ def create(request: HttpRequest):
     })
 
 
+@login_required
 def watchlist(request: HttpRequest, id=None):
     if request.method == "POST":
         listing = Listing.objects.filter(pk=id).first()
@@ -114,5 +122,28 @@ def watchlist(request: HttpRequest, id=None):
 
 def listing(request, id):
     return render(request, "auctions/listing.html", {
-        "listing": Listing.objects.filter(pk=id).first()
+        "listing": Listing.objects.filter(pk=id).first(),
+        "bid_form": CreateBidForm(),
+        "bids": Bid.objects.filter(listing=id).all()
     })
+
+@login_required
+def bid(request, id):
+    if request.method == "POST":
+        form = CreateBidForm(request.POST)
+        if form.is_valid():
+            listing = Listing.objects.filter(pk=id).first()
+            max_bid = Bid.objects.filter(listing=listing).aggregate(max_amount=Max("amount"))["max_amount"]
+            current_price = max_bid if max_bid else listing.start_amount
+
+            amount = form.cleaned_data["amount"]
+            if current_price > amount:
+                messages.error(request, "Incorrect amount!")
+                return redirect("listing", id=id)
+
+            Bid.objects.create(
+                amount=amount,
+                created_by=request.user,
+                listing=Listing.objects.filter(pk=id).first()
+            )
+    return redirect("listing", id=id)

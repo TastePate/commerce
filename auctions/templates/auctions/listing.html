@@ -1,7 +1,28 @@
-{% extends "auctions/listing.html" %}
+{% extends "auctions/layout.html" %}
 
 
 {% block body %}
-    TODO
+    <div class="article-container">
+        <h1>{{ listing.title }}</h1>
+        <p>{{ listing.category }}</p>
+        <p>{{ listing.description }}</p>
+        {% if listing.image_src %}
+            <img src="{{ listing.image_src }}">
+        {% endif %}
+
+        <p>Start amount: {{ listing.start_amount }}</p>
+        {% for bid in bids %}
+            <p>Amount: {{ bid.amount }}. Created by: {{ bid.created_by }} </p>
+        {% empty %}
+            <p>There're no bids for now. Be the first!</p>
+        {% endfor %}
+        <form action="{% url 'bid' listing.id %}" method="post">
+            {% csrf_token %}
+            {{ bid_form }}
+            <input type="submit">
+        </form>
+        <p>Created by: {{ listing.created_by }}</p>
+        <p>{{ listing.post_day }}</p>
+    </div>
 {% endblock %}
 
