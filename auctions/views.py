@@ -186,3 +186,20 @@ def close(request: HttpRequest, id):
             messages.success(request, "Аукцион успешно закрыт.")
 
     return redirect("listing", id=id)
+
+
+def categories(request: HttpRequest):
+    return render(request, "auctions/categories.html", {
+        "categories": (Listing.objects
+            .exclude(category__isnull=True)
+            .exclude(category="")
+            .order_by("category")
+            .values_list("category", flat=True)
+            .distinct())
+    })
+
+
+def category(request: HttpRequest, category):
+    return render(request, "auctions/index.html", {
+        "listings": Listing.objects.filter(category=category)
+    })
