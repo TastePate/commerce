@@ -2,6 +2,15 @@
 
 
 {% block body %}
+    {% if not listing.is_active %}
+        <h2>Listing is not active anymore!</h2>
+        {% if listing.winner %}
+            <p>Победитель аукциона: <strong>{{ listing.winner.username }}</strong>!</p>
+        {% else %}
+            <p>No winner!</p>
+        {% endif %}
+    {% endif %}
+
     <div class="article-container">
         <h1>{{ listing.title }}</h1>
         <p>{{ listing.category }}</p>
@@ -16,11 +25,14 @@
         {% empty %}
             <p>There're no bids for now. Be the first!</p>
         {% endfor %}
-        <form action="{% url 'bid' listing.id %}" method="post">
-            {% csrf_token %}
-            {{ bid_form }}
-            <input type="submit">
-        </form>
+        {% if listing.is_active %}
+            <form action="{% url 'bid' listing.id %}" method="post">
+                {% csrf_token %}
+                {{ bid_form }}
+                <input type="submit">
+            </form>
+        {% endif %}
+
 
         <div class="comments-container">
             {% if comments %}
@@ -35,14 +47,25 @@
                 <p>There're no comments. Show your opinion first!</p>
             {% endif %}
         </div>
-        <form action="{% url 'comment' listing.id %}" method="post">
-            {% csrf_token %}
-            {{ comment_form }}
-            <input type="submit">
-        </form>
+
+        {% if listing.is_active %}
+            <form action="{% url 'comment' listing.id %}" method="post">
+                {% csrf_token %}
+                {{ comment_form }}
+                <input type="submit">
+            </form>
+        {% endif %}
+
 
         <p>Created by: {{ listing.created_by }}</p>
         <p>{{ listing.post_day }}</p>
     </div>
+
+    {% if listing.created_by == request.user and listing.is_active %}
+        <form action="{% url 'close' listing.id %}" method="post">
+            {% csrf_token %}
+            <input type="submit" value="Close listing">
+        </form>
+    {% endif %}
 {% endblock %}
 

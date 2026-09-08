@@ -1,4 +1,5 @@
 from multiprocessing.forkserver import connect_to_new_process
+from statistics import LinearRegression
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -156,7 +157,7 @@ def bid(request, id):
 
 
 @login_required
-def comment(request, id):
+def comment(request: HttpRequest, id):
     if request.method == "POST":
         form = CreateCommentForm(request.POST)
         if form.is_valid():
@@ -170,3 +171,18 @@ def comment(request, id):
 
     return redirect("listing", id=id)
 
+
+@login_required
+def close(request: HttpRequest, id):
+    if request.method == "POST":
+        listing = Listing.objects.filter(pk=id).first()
+        if request.user == listing.created_by and listing.is_active:
+            max_bid = Bid.objects.order_by("-amount").first()
+            if max_bid:
+                listing.winner = max_bid.created_by
+
+            listing.is_active = False
+            listing.save()
+            messages.success(request, "Аукцион успешно закрыт.")
+
+    return redirect("listing", id=id)
