@@ -1,3 +1,5 @@
+from tkinter.constants import CASCADE
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -19,6 +21,7 @@ class Listing(models.Model):
 
 class Comment(models.Model):
     content = models.CharField()
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="comment")
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="author")
     post_date = models.DateTimeField(auto_now_add=True)
 
