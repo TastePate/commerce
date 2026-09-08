@@ -1,3 +1,5 @@
+from multiprocessing.forkserver import connect_to_new_process
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
@@ -8,7 +10,7 @@ from django.urls import reverse
 from django import forms
 from django.contrib import messages
 
-from .models import User, Listing, Bid
+from .models import User, Listing, Bid, Comment
 
 
 class CreateListingForm(forms.Form):
@@ -21,6 +23,8 @@ class CreateListingForm(forms.Form):
 class CreateBidForm(forms.Form):
     amount = forms.DecimalField(min_value=0.1)
 
+class CreateCommentForm(forms.Form):
+    content = forms.CharField(min_length=1, max_length=500)
 
 def index(request):
     return render(request, "auctions/index.html", {
@@ -124,7 +128,9 @@ def listing(request, id):
     return render(request, "auctions/listing.html", {
         "listing": Listing.objects.filter(pk=id).first(),
         "bid_form": CreateBidForm(),
-        "bids": Bid.objects.filter(listing=id).all()
+        "bids": Bid.objects.filter(listing=id).all(),
+        "comment_form": CreateCommentForm(),
+        "comments": Comment.objects.filter(listing=id).all()
     })
 
 @login_required
@@ -147,3 +153,20 @@ def bid(request, id):
                 listing=Listing.objects.filter(pk=id).first()
             )
     return redirect("listing", id=id)
+
+
+@login_required
+def comment(request, id):
+    if request.method == "POST":
+        form = CreateCommentForm(request.POST)
+        if form.is_valid():
+            content = form.cleaned_data["content"]
+            listing = Listing.objects.filter(pk=id).first()
+            Comment.objects.create(
+                content=content,
+                listing=listing,
+                created_by=request.user
+            )
+
+    return redirect("listing", id=id)
+

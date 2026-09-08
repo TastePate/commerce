@@ -21,6 +21,26 @@
             {{ bid_form }}
             <input type="submit">
         </form>
+
+        <div class="comments-container">
+            {% if comments %}
+                {% for comment in comments %}
+                    <div class="comments-item">
+                        <p>{{ comment.content }}</p>
+                        <p>{{ comment.created_by.username }}</p>
+                        <p>{{ comment.post_date }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>There're no comments. Show your opinion first!</p>
+            {% endif %}
+        </div>
+        <form action="{% url 'comment' listing.id %}" method="post">
+            {% csrf_token %}
+            {{ comment_form }}
+            <input type="submit">
+        </form>
+
         <p>Created by: {{ listing.created_by }}</p>
         <p>{{ listing.post_day }}</p>
     </div>
