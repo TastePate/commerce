@@ -16,8 +16,8 @@ from .models import User, Listing, Bid, Comment
 
 class CreateListingForm(forms.Form):
     title = forms.CharField()
-    description = forms.CharField()
-    image_src = forms.CharField(required=False)
+    description = forms.CharField(widget=forms.Textarea())
+    image_src = forms.CharField(required=False, label="Image Source Link")
     category = forms.CharField(required=False)
     start_amount = forms.DecimalField(min_value=0.1)
 
