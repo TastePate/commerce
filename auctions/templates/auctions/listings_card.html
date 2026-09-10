@@ -1,6 +1,6 @@
 <div class="listings-item">
     <h3><a href="{% url 'listing' listing.id %}">{{ listing.title }}</a></h3>
-    <p>{{ listing.description|slice:":100" }}</p>
+    <p>{{ listing.description|truncatechars:200 }}</p>
     {% if listing.image_src %}
         <img src="{{ listing.image_src }}" alt="Listing Image">
     {% endif %}

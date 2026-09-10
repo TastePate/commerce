@@ -8,77 +8,49 @@
         <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
     </head>
     <body>
-<!--        {% if messages %}-->
-<!--            {% for message in messages %}-->
-<!--                <div>{{ message }}</div>-->
-<!--            {% endfor %}-->
-<!--        {% endif %}-->
-<!--        <h1>Auctions</h1>-->
-<!--        <div>-->
-<!--            {% if user.is_authenticated %}-->
-<!--                Signed in as <strong>{{ user.username }}</strong>.-->
-<!--            {% else %}-->
-<!--                Not signed in.-->
-<!--            {% endif %}-->
-<!--        </div>-->
-<!--        <ul class="nav">-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link" href="{% url 'index' %}">Active Listings</a>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link" href="{% url 'categories' %}">Categories</a>-->
-<!--            </li>-->
-<!--            {% if user.is_authenticated %}-->
-<!--                <li class="nav-item">-->
-<!--                    <a class="nav-link" href="{% url 'logout' %}">Log Out</a>-->
-<!--                </li>-->
-<!--                <li class="nav-item">-->
-<!--                    <a class="nav-link" href="{% url 'create' %}">Create Listing</a>-->
-<!--                </li>-->
-<!--                <li class="nav-item">-->
-<!--                    <a class="nav-link" href="{% url 'watchlist' %}">My Watchlist</a>-->
-<!--                </li>-->
-<!--            {% else %}-->
-<!--                <li class="nav-item">-->
-<!--                    <a class="nav-link" href="{% url 'login' %}">Log In</a>-->
-<!--                </li>-->
-<!--                <li class="nav-item">-->
-<!--                    <a class="nav-link" href="{% url 'register' %}">Register</a>-->
-<!--                </li>-->
-<!--            {% endif %}-->
-<!--        </ul>-->
-<!--        <hr>-->
         <div class="page">
             <aside>
                 <div class="menu">
-                    <div class="logo">
-                        <span>May-Bay</span>
-                    </div>
-                    <div class="menu-element">
-                        <svg></svg>
-                        <span><a href="{% url 'index' %}">Active Listings</a></span>
-                    </div>
-                    <div class="menu-element">
-                        <svg></svg>
-                        <span><a href="{% url 'categories' %}">Categories</a></span>
-                    </div>
-                    <div class="menu-element">
-                        <svg></svg>
-                        <span><a href="{% url 'watchlist' %}">My Watchlist</a></span>
-                    </div>
-                    <div class="menu-element">
-                        <svg></svg>
-                        <span><a href="{% url 'create' %}">Create Listing</a></span>
-                    </div>
-                    <div class="menu-element logout">
-                        {% if not user.is_authenticated %}
+                    <a href="{% url 'index' %}">
+                        <div class="menu-element">
                             <svg></svg>
-                            <span><a href="{% url 'login' %}">Log In</a></span>
-                        {% else %}
+                            <span>Active Listings</span>
+                        </div>
+                    </a>
+                    <a href="{% url 'categories' %}">
+                        <div class="menu-element">
                             <svg></svg>
-                            <span><a href="{% url 'logout' %}">Log Out</a></span>
-                        {% endif %}
-                    </div>
+                            <span>Categories</span>
+                        </div>
+                    </a>
+                    <a href="{% url 'watchlist' %}">
+                        <div class="menu-element">
+                            <svg></svg>
+                            <span>My Watchlist</span>
+                        </div>
+                    </a>
+                    <a href="{% url 'create' %}">
+                        <div class="menu-element">
+                            <svg></svg>
+                            <span>Create Listing</span>
+                        </div>
+                    </a>
+
+                    {% if not user.is_authenticated %}
+                        <a href="{% url 'login' %}" class="menu-logout-link">
+                            <div class="menu-element logout">
+                                <svg></svg>
+                                <span>Log In</span>
+                            </div>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'logout' %}" class="menu-logout-link">
+                            <div class="menu-element logout">
+                                <svg></svg>
+                                <span>Log Out</span>
+                            </div>
+                        </a>
+                    {% endif %}
                 </div>
             </aside>
             <main>
