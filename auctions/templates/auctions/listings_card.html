@@ -1,18 +1,23 @@
 <div class="listings-item">
     <h3><a href="{% url 'listing' listing.id %}">{{ listing.title }}</a></h3>
+    <span><strong>Description:</strong></span>
     <p>{{ listing.description|truncatechars:200 }}</p>
     {% if listing.image_src %}
         <img src="{{ listing.image_src }}" alt="Listing Image">
     {% endif %}
-    <p>{{ listing.start_amount }}</p>
-    <p>{{ listing.post_date }}</p>
+    <span><strong>Start price:</strong> {{ listing.start_amount }}</span>
+    <span><strong>Category:</strong> {{ listing.category }}</span>
+    <div class="listings-item-footer">
+        <form action="{% url 'watchlist' listing.id %}" method="post">
+            {% csrf_token %}
+            {% if request.user not in listing.wishlisted_by.all %}
+                <input type="submit" value="Add to Watchlist" name="auction_id">
+            {% else %}
+                <input type="submit" value="Remove from Watchlist" name="auction_id">
+            {% endif %}
+        </form>
 
-    <form action="{% url 'watchlist' listing.id %}" method="post">
-        {% csrf_token %}
-        {% if request.user not in listing.wishlisted_by.all %}
-            <input type="submit" value="Add to Watchlist" name="auction_id">
-        {% else %}
-            <input type="submit" value="Remove from Watchlist" name="auction_id">
-        {% endif %}
-    </form>
+        <small>{{ listing.post_date }}</small>
+    </div>
+
 </div>
