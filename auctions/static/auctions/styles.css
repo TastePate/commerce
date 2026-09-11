@@ -15,6 +15,10 @@ html, body {
     overflow: hidden;
 }
 
+img {
+    border-radius: 10px;
+}
+
 a {
     color: inherit;
     transition: color 0.5s ease;
@@ -185,3 +189,70 @@ button, input[type="submit"], input[type="button"] {
     max-width: 50%;
 }
 
+.full-page-listing-img {
+    width: 300px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+.article-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border: 5px dashed #FBCFE8;
+    border-radius: 10px;
+    padding: 20px;
+    min-height: 100%;
+}
+
+.article-container > details {
+    border: 2px solid pink;
+    border-radius: 20px;
+    padding: 10px 10px 10px 30px;
+}
+
+.created-details {
+    display: grid;
+    margin-top: auto;
+}
+
+.article-main {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+}
+
+.article-description {
+    display: flex;
+    flex-direction: column;
+}
+
+details {
+    interpolate-size: allow-keywords;
+}
+
+details::details-content {
+    height: 0;
+    overflow: hidden;
+    transition: height 0.3s ease;
+}
+
+details[open]::details-content {
+    height: auto;
+}
+
+summary {
+    list-style: none;
+}
+
+summary::-webkit-details-marker {
+    display: none;
+}
+
+.bids-container, .comments-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
