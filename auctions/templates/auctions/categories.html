@@ -10,7 +10,7 @@
         {% for category in categories %}
             <a href="{% url 'category' category %}">{{ category }}</a>
         {% empty %}
-            <p>There're no categories</p>
+            <h3>There're no categories</h3>
         {% endfor %}
     </div>
 {% endblock %}

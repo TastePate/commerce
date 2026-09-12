@@ -37,25 +37,29 @@
                 <div class="menu">
                     <a href="{% url 'index' %}">
                         <div class="menu-element">
-                            <img src="{% static 'auctions/auction.svg' %}">
+<!--                            <img src="{% static 'auctions/auction.svg' %}">-->
+                            <span>●</span>
                             <span>Active Listings</span>
                         </div>
                     </a>
                     <a href="{% url 'categories' %}">
                         <div class="menu-element">
-                            <img src="{% static 'auctions/categories.svg' %}">
+<!--                            <img src="{% static 'auctions/categories.svg' %}">-->
+                            <span>●</span>
                             <span>Categories</span>
                         </div>
                     </a>
                     <a href="{% url 'watchlist' %}">
                         <div class="menu-element">
-                            <img src="{% static 'auctions/add-to-favorites.svg' %}">
+<!--                            <img src="{% static 'auctions/add-to-favorites.svg' %}">-->
+                            <span>●</span>
                             <span>My Watchlist</span>
                         </div>
                     </a>
                     <a href="{% url 'create' %}">
                         <div class="menu-element">
-                            <img src="{% static 'auctions/create.svg' %}">
+<!--                            <img src="{% static 'auctions/create.svg' %}">-->
+                            <span>●</span>
                             <span>Create Listing</span>
                         </div>
                     </a>
@@ -63,14 +67,16 @@
                     {% if not user.is_authenticated %}
                         <a href="{% url 'login' %}" class="menu-logout-link">
                             <div class="menu-element logout">
-                                <img src="{% static 'auctions/logout.svg' %}">
+<!--                                <img src="{% static 'auctions/logout.svg' %}">-->
+                                <span>●</span>
                                 <span>Log In</span>
                             </div>
                         </a>
                     {% else %}
                         <a href="{% url 'logout' %}" class="menu-logout-link">
                             <div class="menu-element logout">
-                                <img src="{% static 'auctions/logout.svg' %}">
+<!--                                <img src="{% static 'auctions/logout.svg' %}">-->
+                                <span></span>
                                 <span>Log Out</span>
                             </div>
                         </a>

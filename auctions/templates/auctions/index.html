@@ -1,11 +1,21 @@
 {% extends "auctions/layout.html" %}
 
 {% block title %}
-    Active Listings
+    {% if title %}
+        {{ title }}
+    {% else %}
+        Active Listings
+    {% endif %}
 {% endblock %}
 
 {% block body %}
-    <h2 class="header">Active Listings</h2>
+    <h2 class="header">
+        {% if title %}
+            {{ title }}
+        {% else %}
+            Active Listings
+        {% endif %}
+    </h2>
 
     <div class="listings-container">
     {% for listing in listings %}

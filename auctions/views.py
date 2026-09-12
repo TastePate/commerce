@@ -203,5 +203,6 @@ def categories(request: HttpRequest):
 
 def category(request: HttpRequest, category):
     return render(request, "auctions/index.html", {
-        "listings": Listing.objects.filter(category=category)
+        "listings": Listing.objects.filter(category=category),
+        "title": f"{category}",
     })

@@ -60,7 +60,7 @@ main {
     padding-left: 20px;
     border-radius: 10px;
     height: 40px;
-    text-align: center;
+    text-align: start;
     transition: background-color 0.2s ease;
 }
 
