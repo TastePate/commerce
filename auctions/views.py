@@ -116,14 +116,15 @@ def watchlist(request: HttpRequest, id=None):
     if request.method == "POST":
         listing = Listing.objects.filter(pk=id).first()
         user = request.user
-        if user not in listing.wishlisted_by.all():
-            listing.wishlisted_by.add(user)
-        else:
+        if listing.wishlisted_by.filter(id=request.user.id).exists():
             listing.wishlisted_by.remove(user)
-        return redirect(reverse("index"))
+        else:
+            listing.wishlisted_by.add(user)
+
+        return redirect(request.META.get('HTTP_REFERER', reverse('index')))
     else:
         return render(request, "auctions/watchlist.html", {
-            "watchlist": Listing.objects.all()
+            "watchlist": Listing.objects.filter(wishlisted_by=request.user)
         })
 
 def listing(request, id):

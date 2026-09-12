@@ -10,11 +10,9 @@
     <div class="listings-container">
 
     {% for listing in watchlist %}
-        {% if request.user in listing.wishlisted_by.all %}
-            {% include "auctions/listings_card.html" %}
-        {% endif %}
+        {% include "auctions/listings_card.html" %}
     {% empty %}
-        <h3>There are no listings yet. Create your first one!</h3>
+        <h3>Empty!</h3>
     {% endfor %}
 
     </div>
