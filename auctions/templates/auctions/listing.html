@@ -32,15 +32,21 @@
             <summary>Bids</summary>
             <div class="bids-container">
                 {% for bid in bids %}
-                    <p>Amount: {{ bid.amount }}. Created by: {{ bid.created_by }} </p>
+                <div class="details-container-item">
+                    <p>Amount: {{ bid.amount }}.</p>
+                    <small>Created by: {{ bid.created_by }}</small>
+                </div>
                 {% empty %}
                     <p>There're no bids for now. Be the first!</p>
                 {% endfor %}
                 {% if listing.is_active %}
                     <form action="{% url 'bid' listing.id %}" method="post">
                         {% csrf_token %}
-                        {{ bid_form }}
-                        <input type="submit">
+                        <div class="details-container-item">
+                            <label for="{{ bid_form.amount.id_for_label }}">My Amount: </label>
+                            {{ bid_form.amount }}
+                            <input type="submit" value="Create your bid">
+                        </div>
                     </form>
                 {% endif %}
             </div>
@@ -51,10 +57,12 @@
             <div class="comments-container">
                 {% if comments %}
                     {% for comment in comments %}
-                        <div class="comments-item">
+                        <div class="details-container-item">
                             <p>{{ comment.content }}</p>
-                            <p>{{ comment.created_by.username }}</p>
-                            <p>{{ comment.post_date }}</p>
+                            <div style="display: flex; flex-direction: column">
+                                <small>By: <strong>{{ comment.created_by.username }}</strong></small>
+                                <small>Date: {{ comment.post_date }}</small>
+                            </div>
                         </div>
                     {% endfor %}
                 {% else %}
@@ -65,22 +73,33 @@
             {% if listing.is_active %}
             <form action="{% url 'comment' listing.id %}" method="post">
                 {% csrf_token %}
-                {{ comment_form }}
-                <input type="submit">
+                <div class="details-container-item create-comment">
+                    {{ comment_form.content }}
+                    <div class="your-comment">
+                        <div style="display: flex; flex-direction: column">
+                            <small>By: <strong>{{ request.user.username }}</strong></small>
+                            <small>Date: {% now  "N j, Y, g:i a" %}</small>
+                        </div>
+                        <input type="submit" value="Create your comment" style="margin-top: 20px;">
+                    </div>
+                </div>
             </form>
         {% endif %}
         </details>
-        <div class="created-details">
-            <span>Created by: {{ listing.created_by }}</span>
-            <small>{{ listing.post_date }}</small>
+        <div class="article-footer">
+            <div class="article-footer details">
+                <span>Created by: {{ listing.created_by }}</span>
+                <small>{{ listing.post_date }}</small>
+            </div>
+            <div>
+                {% if listing.created_by == request.user and listing.is_active %}
+                    <form action="{% url 'close' listing.id %}" method="post">
+                        {% csrf_token %}
+                        <input type="submit" value="Close listing">
+                    </form>
+                {% endif %}
+            </div>
         </div>
     </div>
-
-    {% if listing.created_by == request.user and listing.is_active %}
-        <form action="{% url 'close' listing.id %}" method="post">
-            {% csrf_token %}
-            <input type="submit" value="Close listing">
-        </form>
-    {% endif %}
 {% endblock %}
 

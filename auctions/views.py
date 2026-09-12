@@ -25,7 +25,8 @@ class CreateBidForm(forms.Form):
     amount = forms.DecimalField(min_value=0.1)
 
 class CreateCommentForm(forms.Form):
-    content = forms.CharField(min_length=1, max_length=500)
+    content = forms.CharField(min_length=1, max_length=500, widget=forms.Textarea())
+
 
 def index(request):
     return render(request, "auctions/index.html", {
